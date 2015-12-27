@@ -5,6 +5,7 @@ package main
 import (
 	"bufio"
 	"fmt"
+	"log"
 	"os"
 )
 
@@ -41,5 +42,7 @@ func countLines(f *os.File, counts map[string][]string) {
 		}
 		counts[text] = append(counts[text], f.Name())
 	}
-	// NOTE: ignoring potential errors from input.Err()
+	if err := input.Err(); err != nil {
+		log.Fatal(err)
+	}
 }
