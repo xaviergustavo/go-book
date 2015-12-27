@@ -1,4 +1,4 @@
-Testing
-This is a text file
+New test file
 Testing
 123
+This is a golang test
