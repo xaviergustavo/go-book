@@ -1,5 +1,5 @@
 // Exercise 1.10
-// Find a web site that produces a large ammount of data. Investigate
+// Find a web site that produces a large amount of data. Investigate
 // caching by running fetchall twice in succession to see whether the
 // reported time changes much. Do you get the same content each time?
 // Modify fetchall to print its output to a file so it can be examined.
@@ -12,6 +12,7 @@ import (
 	"net/http"
 	"os"
 	"time"
+	"log"
 )
 
 func main() {
@@ -20,8 +21,12 @@ func main() {
 	for _, url := range os.Args[1:] {
 		go fetch(url, ch) // start a goroutine
 	}
+	f, err := os.OpenFile("log.out", os.O_RDWR, 0666)
+	if err != nil {
+		log.Fatal(err)
+	}
 	for range os.Args[1:] {
-		fmt.Println(<-ch) // receive from channel ch
+		fmt.Fprintln(f, <-ch) // receive from channel ch
 	}
 	fmt.Printf("%.2fs elapsed\n", time.Since(start).Seconds())
 }
