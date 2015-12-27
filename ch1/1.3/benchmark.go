@@ -26,8 +26,7 @@ func echo2(args []string) {
 func benchmark(echo func(args []string)) {
 	start := time.Now()
 	echo(args)
-	end := time.Now()
-	fmt.Println("Total time:", end.Sub(start).String())
+	fmt.Println("Total time:", time.Since(start).String())
 }
 
 func main() {
