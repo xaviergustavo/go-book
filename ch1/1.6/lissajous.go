@@ -1,8 +1,7 @@
-// Exercise 1.5
-// Change the Lissajous program's color palette to green on black, for added authenticity.
-// To create the web color #RRGGBB, use color.RGBA{0xRR, 0xGG, 0xBB, 0xff}, where
-// each pair of hexadecimal digits represents the intensity of the red, green, or blue
-// component pixel.
+// Exercise 1.6
+// Modify the Lissajous program to produce images in multiple colors by adding
+// more values to palette and then displaying them by changing the third argument
+// of SetColorIndex in some interesting way
 package main
 
 import (
@@ -17,21 +16,13 @@ import (
 
 var palette = []color.Color{
 	color.Black,
+	color.White,
 	color.RGBA{0x00, 0xff, 0x00, 0xdd},
 	color.RGBA{0xff, 0x00, 0x00, 0xdd},
 	color.RGBA{0x00, 0x00, 0xff, 0xdd},
 	color.RGBA{0xff, 0xff, 0x00, 0xdd},
 	color.RGBA{0xff, 0x00, 0xff, 0xdd},
 }
-
-const (
-	blackIndex = iota
-	greenIndex
-	redIndex
-	blueIndex
-	yellowIndex
-	pinkIndex
-)
 
 func main() {
 	lissajous(os.Stdout)
@@ -51,10 +42,13 @@ func lissajous(out io.Writer) {
 	for i := 0; i < nframes; i++ {
 		rect := image.Rect(0, 0, 2*size+1, 2*size+1)
 		img := image.NewPaletted(rect, palette)
+		index := uint8(rand.Int() % len(palette)) // random palette index color
+		if index == 0 {
+			index = 1 // change the index if the color is the same as the background color
+		}
 		for t := 0.0; t < cycles*2*math.Pi; t += res {
 			x := math.Sin(t)
 			y := math.Sin(t*freq + phase)
-			index := uint8(rand.Int() % len(palette))
 			img.SetColorIndex(size+int(x*size+0.5), size+int(y*size+0.5), index)
 		}
 		phase += 0.1
